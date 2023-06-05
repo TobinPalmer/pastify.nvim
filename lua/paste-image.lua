@@ -11,6 +11,7 @@ M.config = {
 
 local function create_command()
   if not vim.fn.exists 'python3' then
+    print 'cannot find python3, returning (paste-image.nvim)'
     return
   end
 
@@ -18,7 +19,7 @@ local function create_command()
     python3 import paste_image.main
     python3 finder = paste_image.main.Finder()
 
-    command! FindTest python3 finder.find()
+    command! PasteAsLink python3 finder.test()
   ]]
 end
 
