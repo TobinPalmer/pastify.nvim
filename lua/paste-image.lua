@@ -9,21 +9,29 @@ M.config = {
   options = {},
 }
 
+function PasteTextAsync()
+  vim.schedule(function()
+    vim.api.nvim_command "lua require'paste_image.main'.PasteImage():paste_text()"
+  end)
+end
+
+vim.api.nvim_command 'command! PasteAsLink lua PasteAsLink()'
+
 local function create_command()
   if not vim.fn.exists 'python3' then
-    print 'cannot find python3, returning (paste-image.nvim)'
+    print 'cannot find python3, returning [paste-image.nvim]'
     return
   end
 
   -- Set the runtime path to ./rplugin
   vim.cmd [[
-    " python3 import paste_image.main
-    " python3 image = paste_image.main.PasteImage()
-    "
-    " command! PasteAsLink python3 image.paste_text()
+    python3 import paste_image.main
+    python3 image = paste_image.main.PasteImage()
+
+    command! PasteAsLink python3 image.paste_text()
   ]]
 
-  vim.keymap.set('n', '<C-V>', '<CMD>PasteAsLink<CR>')
+  vim.keymap.set('n', '<leader>pi', '<CMD>PasteAsLink<CR>')
 end
 
 ---@param params config
