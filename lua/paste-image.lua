@@ -15,12 +15,15 @@ local function create_command()
     return
   end
 
+  -- Set the runtime path to ./rplugin
   vim.cmd [[
-    python3 import paste_image.main
-    python3 finder = paste_image.main.Finder()
-
-    command! PasteAsLink python3 finder.test()
+    " python3 import paste_image.main
+    " python3 image = paste_image.main.PasteImage()
+    "
+    " command! PasteAsLink python3 image.paste_text()
   ]]
+
+  vim.keymap.set('n', '<C-V>', '<CMD>PasteAsLink<CR>')
 end
 
 ---@param params config
