@@ -1,13 +1,22 @@
 local M = {}
 
 ---@class plug_opts
+---@field markdown_image boolean
+---@field markdown_standard boolean
 
 ---@class config
-
+---@field options plug_opts
 ---@type config
 M.config = {
-  options = {},
+  options = {
+    markdown_image = false,
+    markdown_standard = true,
+  },
 }
+
+M.getConfig = function()
+  return M.config
+end
 
 function PasteTextAsync()
   vim.schedule(function()

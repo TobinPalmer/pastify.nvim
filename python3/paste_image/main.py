@@ -1,4 +1,5 @@
 import vim
+import typing
 import asyncio
 import io
 import codecs
@@ -10,11 +11,34 @@ from PIL import ImageGrab
 class PasteImage(object):
     def __init__(self):
         self.nonce = secrets.token_urlsafe()
+        self.config = vim.exec_lua('return require("paste-image").getConfig()')
+
+    def logger(self, msg: str, level: typing.Literal["WARN", "INFO", "ERROR"]) -> None:
+        vim.command(
+            f'lua vim.notify("{msg}", vim.log.levels.{level})')
+
+    def validate_config(self) -> bool:
+        c = self.config
+        o = self.config['options']
+
+        if c is None:
+            return False
+
+        if o["markdown_image"] is True and o["markdown_standard"] is True:
+            self.logger(
+                "Both markdown_image and markdown_standard cannot be true", "WARN")
+            return False
+        return True
 
     def paste_text(self) -> None:
         img = ImageGrab.grabclipboard()
         if img is None:
-            print("No image in clipboard")
+            self.logger(
+                "No image in clipboard.", "WARN")
+            return
+        if not self.validate_config():
+            self.logger(
+                "Your config has an issue, please fix it.", "WARN")
             return
 
         img_bytes = io.BytesIO()
@@ -23,7 +47,10 @@ class PasteImage(object):
         base64_text = codecs.decode(base64_data, 'ascii')
 
         placeholder_text = f"Upload In Progress... {self.nonce}"
-        vim.command(f"normal! i![]({placeholder_text})")
+        if self.config['options']['markdown_image'] is True:
+            vim.command(f"normal! i<img src='{placeholder_text} />'")
+        else:
+            vim.command(f"normal! i![]({placeholder_text})")
 
         asyncio.create_task(self.get_image(base64_text, placeholder_text))
 
