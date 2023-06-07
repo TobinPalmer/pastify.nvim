@@ -1,3 +1,4 @@
+from os import path
 import vim
 import typing
 import asyncio
@@ -12,10 +13,11 @@ class PasteImage(object):
     def __init__(self):
         self.nonce = secrets.token_urlsafe()
         self.config = vim.exec_lua('return require("paste-image").getConfig()')
+        self.path = vim.exec_lua('return vim.fn.getcwd()')
 
     def logger(self, msg: str, level: typing.Literal["WARN", "INFO", "ERROR"]) -> None:
         vim.command(
-            f'lua vim.notify("{msg}", vim.log.levels.{level})')
+            f'lua vim.notify("{msg}", vim.log.levels.{level or "INFO"})')
 
     def validate_config(self) -> bool:
         c = self.config
@@ -28,9 +30,15 @@ class PasteImage(object):
             self.logger(
                 "Both markdown_image and markdown_standard cannot be true", "WARN")
             return False
+
+        if o["online"] is True and o["computer"] is True:
+            self.logger(
+                "Both online and computer cannot be true", "WARN")
+            return False
         return True
 
     def paste_text(self) -> None:
+        o = self.config['options']
         img = ImageGrab.grabclipboard()
         if img is None:
             self.logger(
@@ -41,18 +49,26 @@ class PasteImage(object):
                 "Your config has an issue, please fix it.", "WARN")
             return
 
-        img_bytes = io.BytesIO()
-        img.save(img_bytes, format='PNG')
-        base64_data = codecs.encode(img_bytes.getvalue(), 'base64')
-        base64_text = codecs.decode(base64_data, 'ascii')
+        if self.config['options']['computer'] is True:
+            if path.exists(path.join(self.path, o['local_path'])):
+                print("exists")
+            else:
+                print("doesn't exist")
 
-        placeholder_text = f"Upload In Progress... {self.nonce}"
-        if self.config['options']['markdown_image'] is True:
-            vim.command(f"normal! i<img src='{placeholder_text} />'")
+            print(f"{self.path}{o['local_path']}")
         else:
-            vim.command(f"normal! i![]({placeholder_text})")
+            img_bytes = io.BytesIO()
+            img.save(img_bytes, format="PNG")
+            base64_data = codecs.encode(img_bytes.getvalue(), 'base64')
+            base64_text = codecs.decode(base64_data, 'ascii')
 
-        asyncio.create_task(self.get_image(base64_text, placeholder_text))
+            placeholder_text = f"Upload In Progress... {self.nonce}"
+            if o['markdown_image'] is True:
+                vim.command(f"normal! i<img src='{placeholder_text} />'")
+            else:
+                vim.command(f"normal! i![]({placeholder_text})")
+
+            asyncio.create_task(self.get_image(base64_text, placeholder_text))
 
     async def get_image(self, base64_text: str, placeholder_text: str):
         import re
@@ -67,11 +83,9 @@ class PasteImage(object):
         output, _ = await process.communicate()
         result = re.escape(json.loads(output.decode('utf-8'))
                            ['data']['url']).replace('/', r'\/')
-        # vim.command(f"norm! i{result}")
 
         vim.command(f"%s/{placeholder_text}/{result}/g")
         self.replace_placeholder(placeholder_text, result)
 
     def replace_placeholder(self, placeholder_text: str, result: str):
-        # Replace the placeholder text with the result
         vim.command(f"%s/{placeholder_text}/{result}/g")

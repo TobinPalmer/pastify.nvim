@@ -3,6 +3,9 @@ local M = {}
 ---@class plug_opts
 ---@field markdown_image boolean
 ---@field markdown_standard boolean
+---@field online boolean
+---@field computer boolean
+---@field local_path string
 
 ---@class config
 ---@field options plug_opts
@@ -11,6 +14,9 @@ M.config = {
   options = {
     markdown_image = false,
     markdown_standard = true,
+    online = false,
+    computer = true,
+    local_path = '/assets/imgs/',
   },
 }
 
@@ -39,8 +45,6 @@ local function create_command()
 
     command! PasteAsLink python3 image.paste_text()
   ]]
-
-  vim.keymap.set('n', '<leader>pi', '<CMD>PasteAsLink<CR>')
 end
 
 ---@param params config
