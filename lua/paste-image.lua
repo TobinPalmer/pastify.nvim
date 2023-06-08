@@ -1,22 +1,26 @@
 local M = {}
 
 ---@class plug_opts
+---@field computer boolean
+---@field default_name string
+---@field local_path string
 ---@field markdown_image boolean
 ---@field markdown_standard boolean
 ---@field online boolean
----@field computer boolean
----@field local_path string
+---@field apikey string?
 
 ---@class config
 ---@field options plug_opts
 ---@type config
 M.config = {
   options = {
+    computer = true,
+    default_name = 'image',
+    local_path = '/assets/imgs/',
     markdown_image = false,
     markdown_standard = true,
     online = false,
-    computer = true,
-    local_path = '/assets/imgs/',
+    apikey = '',
   },
 }
 
