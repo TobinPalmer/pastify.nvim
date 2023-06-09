@@ -59,10 +59,10 @@ require('pastify').setup {
 
 | Feature                      | pastify.nvim | img-paste.vim | clipboard-image.nvim |
 |------------------------------|--------------|---------------|----------------------|
-| Vimscript                    |              | [x]           |                      |
-| Async                        | [x]          |               |                      |
-| Local                        | [x]          | [x]           | [x]                  |
-| Online                       | [x]          |               |                      |
-| Highly Customizable          | [x]          |               | [x]                  |
-| Custom Snippets For Filetype | [x]          | [x]           | [x]                  |
+| Vimscript                    |              | ✅            |                      |
+| Async                        | ✅           |               |                      |
+| Local                        | ✅           | ✅            | ✅                   |
+| Online                       | ✅           |               |                      |
+| Highly Customizable          | ✅           |               | ✅                   |
+| Custom Snippets For Filetype | ✅           | ✅            | ✅                   |
 
