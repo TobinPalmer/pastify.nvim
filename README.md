@@ -57,12 +57,12 @@ require('pastify').setup {
 
 ## Comparison and similar plugins
 
-| Feature                      | pastify.nvim | img-paste.vim | clipboard-image.nvim |
-|------------------------------|--------------|---------------|----------------------|
-| Vimscript                    |              | ✅            |                      |
-| Async                        | ✅           |               |                      |
-| Local                        | ✅           | ✅            | ✅                   |
-| Online                       | ✅           |               |                      |
-| Highly Customizable          | ✅           |               | ✅                   |
-| Custom Snippets For Filetype | ✅           | ✅            | ✅                   |
+| Feature                      | [pastify.nvim](https://github.com/TobinPalmer/pastify.nvim) | [img-paste.vim](https://github.com/img-paste-devs/img-paste.vim) | [clipboard-image.nvim](https://github.com/ekickx/clipboard-image.nvim) |
+|------------------------------|-------------------------------------------------------------|------------------------------------------------------------------|------------------------------------------------------------------------|
+| Vimscript                    |                                                             | ✅                                                               |                                                                        |
+| Async                        | ✅                                                          |                                                                  |                                                                        |
+| Local                        | ✅                                                          | ✅                                                               | ✅                                                                     |
+| Online                       | ✅                                                          |                                                                  |                                                                        |
+| Highly Customizable          | ✅                                                          |                                                                  | ✅                                                                     |
+| Custom Snippets For Filetype | ✅                                                          | ✅                                                               | ✅                                                                     |
 
