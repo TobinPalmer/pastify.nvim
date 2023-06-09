@@ -2,9 +2,9 @@ from typing import TypedDict, Literal
 
 
 class Options(TypedDict):
+    apikey: str
     local_path: str
     save: Literal["local", "online"]
-    apikey: str
 
 
 class Config(TypedDict):

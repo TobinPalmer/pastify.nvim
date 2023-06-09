@@ -1,9 +1,9 @@
 local M = {}
 
 ---@class plug_opts
+---@field apikey string?
 ---@field local_path string
 ---@field save "local"|"online"
----@field apikey string?
 
 ---@class config
 ---@field opts plug_opts
@@ -12,9 +12,9 @@ local M = {}
 ---@type config
 M.config = {
   opts = {
+    apikey = '',
     local_path = '/assets/imgs/',
     save = 'local',
-    apikey = '',
   },
   ft = {
     html = '<img src="$IMG$" alt="">',

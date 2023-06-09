@@ -54,3 +54,15 @@ require('pastify').setup {
   },
 }
 ```
+
+## Comparison and similar plugins
+
+| Feature                      | pastify.nvim | img-paste.vim | clipboard-image.nvim |
+|------------------------------|--------------|---------------|----------------------|
+| Vimscript                    |              | [x]           |                      |
+| Async                        | [x]          |               |                      |
+| Local                        | [x]          | [x]           | [x]                  |
+| Online                       | [x]          |               |                      |
+| Highly Customizable          | [x]          |               | [x]                  |
+| Custom Snippets For Filetype | [x]          | [x]           | [x]                  |
+
