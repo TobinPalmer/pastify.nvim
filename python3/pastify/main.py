@@ -11,11 +11,11 @@ from typing import Literal
 import vim  # type: ignore
 
 
-class PasteImage(object):
+class Pastify(object):
     def __init__(self) -> None:
         self.nonce: str = token_urlsafe()
         self.config: Config = vim.exec_lua(
-            'return require("paste-image").getConfig()')
+            'return require("pastify").getConfig()')
         self.path: str = vim.exec_lua('return vim.fn.getcwd()')
         self.filetype: str = vim.exec_lua('return vim.bo.filetype')
 
