@@ -93,12 +93,7 @@ class PasteImage(object):
 
         output, _ = await process.communicate()
 
-        # if re.escape(loads(output.decode('utf-8'))['status_code']):
-        #     self.logger("FAIL", "ERROR")
-        #     return
-
         result = re.escape(loads(output.decode('utf-8'))
                            ['data']['url']).replace('/', r'\/')
 
-        self.logger(result, "WARN")
         vim.command(f"%s/{placeholder_text}/{result}/g")

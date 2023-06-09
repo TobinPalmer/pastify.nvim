@@ -52,11 +52,10 @@ end
 
 local function create_command()
   if not vim.fn.exists 'python3' then
-    print 'cannot find python3, returning [paste-image.nvim]'
+    print 'Make sure python3 is installed for paste-image.nvim to work.'
     return
   end
 
-  -- Set the runtime path to ./rplugin
   vim.cmd [[
     python3 import paste_image.main
     python3 image = paste_image.main.PasteImage()

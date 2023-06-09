@@ -20,11 +20,6 @@ def validate_config(config: Config, logger, filetype: str) -> bool:
                     get one at https://api.imgbb.com/", "WARN")
         return False
 
-    if len(opts["apikey"]) != 32:
-        logger(
-            "Please check your api key as it is not valid", "WARN")
-        return False
-
     if opts["save"] != "local" and opts["save"] != 'online':
         logger(
             str(opts['save']), "WARN")
