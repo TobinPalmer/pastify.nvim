@@ -27,12 +27,6 @@ M.getConfig = function()
   return M.config
 end
 
-function PasteTextAsync()
-  vim.schedule(function()
-    vim.api.nvim_command "lua require'paste_image.main'.PasteImage():paste_text()"
-  end)
-end
-
 vim.api.nvim_command 'command! PasteAsLink lua PasteAsLink()'
 
 local function dump(o)
@@ -52,13 +46,13 @@ end
 
 local function create_command()
   if not vim.fn.exists 'python3' then
-    print 'Make sure python3 is installed for paste-image.nvim to work.'
+    print 'Make sure python3 is installed for pastify.nvim to work.'
     return
   end
 
   vim.cmd [[
-    python3 import paste_image.main
-    python3 image = paste_image.main.PasteImage()
+    python3 import pastify.main
+    python3 image = pastify.main.Pastify()
 
     command! PasteAsLink python3 image.paste_text()
   ]]
