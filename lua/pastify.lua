@@ -27,23 +27,6 @@ M.getConfig = function()
   return M.config
 end
 
-vim.api.nvim_command 'command! PasteAsLink lua PasteAsLink()'
-
-local function dump(o)
-  if type(o) == 'table' then
-    local s = '{ '
-    for k, v in pairs(o) do
-      if type(k) ~= 'number' then
-        k = '"' .. k .. '"'
-      end
-      s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
-    end
-    return s .. '} '
-  else
-    return tostring(o)
-  end
-end
-
 local function create_command()
   if not vim.fn.exists 'python3' then
     print 'Make sure python3 is installed for pastify.nvim to work.'
@@ -54,7 +37,7 @@ local function create_command()
     python3 import pastify.main
     python3 image = pastify.main.Pastify()
 
-    command! PasteAsLink python3 image.paste_text()
+    command! Pastify python3 image.paste_text()
   ]]
 end
 
