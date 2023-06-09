@@ -17,6 +17,7 @@ class PasteImage(object):
         self.config: Config = vim.exec_lua(
             'return require("paste-image").getConfig()')
         self.path: str = vim.exec_lua('return vim.fn.getcwd()')
+        self.filetype: str = vim.exec_lua('return vim.bo.filetype')
 
     def logger(
             self, msg: str, level: Literal["WARN", "INFO", "ERROR"]
@@ -31,7 +32,7 @@ class PasteImage(object):
             self.logger(
                 "No image in clipboard.", "WARN")
             return
-        if not validate_config(self.config, self.logger):
+        if not validate_config(self.config, self.logger, self.filetype):
             self.logger(
                 "Your config has an issue, please fix it.", "WARN")
             return
@@ -71,10 +72,9 @@ class PasteImage(object):
             placeholder_text = f"Upload In Progress... {self.nonce}"
             create_task(self.get_image(base64_text, placeholder_text))
 
-        if options['markdown_image']:
-            vim.command(f"normal! i<img src='{placeholder_text} />'")
-        else:
-            vim.command(f"normal! i![]({placeholder_text})")
+        pattern = self.config['ft'][self.filetype].replace(
+            "$IMG$", placeholder_text)
+        vim.command(f"normal! i{pattern}")
 
     async def get_image(self, base64_text: str, placeholder_text: str) -> None:
         import re

@@ -1,17 +1,17 @@
 from .type import Config
 
 
-def validate_config(config: Config, logger) -> bool:
+def validate_config(config: Config, logger, filetype: str) -> bool:
     c = config
     o = c['options']
 
-    if c is None:
+    if filetype not in c["ft"]:
+        logger(
+            "Not in a filetype configured in config.options.ft",
+            "WARN")
         return False
 
-    if o["markdown_image"] is True and o["markdown_standard"] is True:
-        logger(
-            "Both markdown_image and markdown_standard cannot be true",
-            "WARN")
+    if c is None:
         return False
 
     if o["apikey"] == "":

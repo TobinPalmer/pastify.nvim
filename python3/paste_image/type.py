@@ -5,11 +5,10 @@ class Options(TypedDict):
     computer: bool
     default_name: bool
     local_path: str
-    markdown_image: bool
-    markdown_standard: bool
     online: bool
     apikey: str
 
 
 class Config(TypedDict):
     options: Options
+    ft: dict[str, str]

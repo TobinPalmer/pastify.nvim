@@ -4,8 +4,6 @@ local M = {}
 ---@field computer boolean
 ---@field default_name string
 ---@field local_path string
----@field markdown_image boolean
----@field markdown_standard boolean
 ---@field online boolean
 ---@field apikey string?
 
@@ -17,10 +15,13 @@ M.config = {
     computer = true,
     default_name = 'image',
     local_path = '/assets/imgs/',
-    markdown_image = false,
-    markdown_standard = true,
     online = false,
     apikey = '',
+  },
+  ft = {
+    html = '<img src="$IMG$" alt="">',
+    markdown = '![]($IMG$)',
+    tex = [[\includegraphics[width=\linewidth]{$IMG$}]],
   },
 }
 
