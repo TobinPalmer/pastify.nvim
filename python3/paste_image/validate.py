@@ -7,7 +7,7 @@ def validate_config(config: Config, logger, filetype: str) -> bool:
 
     if filetype not in c["ft"]:
         logger(
-            "Not in a filetype configured in config.options.ft",
+            "Not in a filetype configured in config.ft",
             "WARN")
         return False
 
