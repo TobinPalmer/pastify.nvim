@@ -1,21 +1,19 @@
 local M = {}
 
 ---@class plug_opts
----@field computer boolean
----@field default_name string
 ---@field local_path string
----@field online boolean
+---@field save "local"|"online"
 ---@field apikey string?
 
 ---@class config
----@field options plug_opts
+---@field opts plug_opts
+---@field ft table<string, string>
+
 ---@type config
 M.config = {
-  options = {
-    computer = true,
-    default_name = 'image',
+  opts = {
     local_path = '/assets/imgs/',
-    online = false,
+    save = 'local',
     apikey = '',
   },
   ft = {
@@ -37,6 +35,21 @@ end
 
 vim.api.nvim_command 'command! PasteAsLink lua PasteAsLink()'
 
+local function dump(o)
+  if type(o) == 'table' then
+    local s = '{ '
+    for k, v in pairs(o) do
+      if type(k) ~= 'number' then
+        k = '"' .. k .. '"'
+      end
+      s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
+    end
+    return s .. '} '
+  else
+    return tostring(o)
+  end
+end
+
 local function create_command()
   if not vim.fn.exists 'python3' then
     print 'cannot find python3, returning [paste-image.nvim]'
@@ -54,7 +67,7 @@ end
 
 ---@param params config
 M.setup = function(params)
-  M.config = vim.tbl_deep_extend('force', {}, M.config, params or {})
+  M.config = vim.tbl_deep_extend('force', {}, M.config, params)
   create_command()
 end
 

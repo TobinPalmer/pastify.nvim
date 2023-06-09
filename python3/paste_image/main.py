@@ -26,20 +26,22 @@ class PasteImage(object):
             f'lua vim.notify("{msg}", vim.log.levels.{level or "INFO"})')
 
     def paste_text(self) -> None:
-        options = self.config['options']
+        options = self.config['opts']
         img = ImageGrab.grabclipboard()
         if img is None:
             self.logger(
                 "No image in clipboard.", "WARN")
             return
-        if not validate_config(self.config, self.logger, self.filetype):
-            self.logger(
-                "Your config has an issue, please fix it.", "WARN")
+        if not validate_config(
+            self.config,
+            self.logger,
+            vim.exec_lua('return vim.bo.filetype')
+        ):
             return
 
         file_name = ""
 
-        if options['computer']:
+        if options['save'] == "local":
             file_name = vim.exec_lua("return vim.fn.input('File Name? ', '')")
             if file_name == "":
                 self.logger("No file name provided.", "WARN")
@@ -59,7 +61,7 @@ class PasteImage(object):
         img_bytes = BytesIO()
         img.save(img_bytes, format="PNG")
         placeholder_text = ""
-        if self.config['options']['computer']:
+        if self.config['opts']['save'] == "local":
             assets_path = f"{self.path}{options['local_path']}"
             placeholder_text = f"{assets_path}{file_name}.png"
             if not path.exists(assets_path):
@@ -72,14 +74,15 @@ class PasteImage(object):
             placeholder_text = f"Upload In Progress... {self.nonce}"
             create_task(self.get_image(base64_text, placeholder_text))
 
-        pattern = self.config['ft'][self.filetype].replace(
+        pattern = self.config['ft'][
+            vim.exec_lua('return vim.bo.filetype')].replace(
             "$IMG$", placeholder_text)
         vim.command(f"normal! i{pattern}")
 
     async def get_image(self, base64_text: str, placeholder_text: str) -> None:
         import re
         curl_command = f'curl --location --request POST \
-                "https://api.imgbb.com/1/upload?key={self.config["options"]["apikey"]}"\
+                "https://api.imgbb.com/1/upload?key={self.config["opts"]["apikey"]}"\
                 --form "image={base64_text}"'
 
         process = await create_subprocess_shell(
@@ -89,11 +92,13 @@ class PasteImage(object):
         )
 
         output, _ = await process.communicate()
+
+        # if re.escape(loads(output.decode('utf-8'))['status_code']):
+        #     self.logger("FAIL", "ERROR")
+        #     return
+
         result = re.escape(loads(output.decode('utf-8'))
                            ['data']['url']).replace('/', r'\/')
 
-        vim.command(f"%s/{placeholder_text}/{result}/g")
-        self.replace_placeholder(placeholder_text, result)
-
-    def replace_placeholder(self, placeholder_text: str, result: str) -> None:
+        self.logger(result, "WARN")
         vim.command(f"%s/{placeholder_text}/{result}/g")

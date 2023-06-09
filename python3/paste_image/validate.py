@@ -3,7 +3,7 @@ from .type import Config
 
 def validate_config(config: Config, logger, filetype: str) -> bool:
     c = config
-    o = c['options']
+    opts = c['opts']
 
     if filetype not in c["ft"]:
         logger(
@@ -14,14 +14,19 @@ def validate_config(config: Config, logger, filetype: str) -> bool:
     if c is None:
         return False
 
-    if o["apikey"] == "":
+    if opts["apikey"] == "":
         logger(
             "You need to get a free API key for this plugin to work,\
                     get one at https://api.imgbb.com/", "WARN")
         return False
 
-    if o["online"] is True and o["computer"] is True:
+    if len(opts["apikey"]) != 32:
         logger(
-            "Both online and computer cannot be true", "WARN")
+            "Please check your api key as it is not valid", "WARN")
+        return False
+
+    if opts["save"] != "local" and opts["save"] != 'online':
+        logger(
+            str(opts['save']), "WARN")
         return False
     return True

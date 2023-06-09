@@ -1,14 +1,13 @@
-from typing import TypedDict
+from typing import TypedDict, Literal
 
 
 class Options(TypedDict):
-    computer: bool
     default_name: bool
     local_path: str
-    online: bool
+    save: Literal["local", "online"]
     apikey: str
 
 
 class Config(TypedDict):
-    options: Options
+    opts: Options
     ft: dict[str, str]
