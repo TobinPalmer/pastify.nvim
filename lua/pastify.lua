@@ -1,6 +1,7 @@
 local M = {}
 
 ---@class plug_opts
+---@field absolute_path boolean
 ---@field apikey string?
 ---@field local_path string
 ---@field save "local"|"online"
@@ -12,6 +13,7 @@ local M = {}
 ---@type config
 M.config = {
   opts = {
+    absolute_path = false,
     apikey = '',
     local_path = '/assets/imgs/',
     save = 'local',

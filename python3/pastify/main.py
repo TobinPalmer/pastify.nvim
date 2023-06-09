@@ -62,7 +62,10 @@ class Pastify(object):
         img.save(img_bytes, format="PNG")
         placeholder_text = ""
         if self.config['opts']['save'] == "local":
-            assets_path = f"{self.path}{options['local_path']}"
+            if self.config['opts']['absolute_path']:
+                assets_path = f"{self.path}{options['local_path']}"
+            else:
+                assets_path = f".{options['local_path']}"
             placeholder_text = f"{assets_path}{file_name}.png"
             if not path.exists(assets_path):
                 makedirs(assets_path)

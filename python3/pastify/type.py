@@ -2,6 +2,7 @@ from typing import TypedDict, Literal
 
 
 class Options(TypedDict):
+    absolute_path: bool
     apikey: str
     local_path: str
     save: Literal["local", "online"]
