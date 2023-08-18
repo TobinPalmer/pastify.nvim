@@ -11,6 +11,7 @@ Local Saving               |  Online Hosting
 ## Requirements
 
 - Neovim 0.8+
+- MacOS or Windows *doesn't* work on linux
 - Python3
 - Pip3
 - For saving images online
