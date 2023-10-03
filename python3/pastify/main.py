@@ -25,6 +25,11 @@ class Pastify(object):
         vim.command(
             f'lua vim.notify("{msg}", vim.log.levels.{level or "INFO"})')
 
+    def get_image_path_name(self):
+        return vim.exec_lua(
+            'return require("pastify").createImagePathName()'
+        )
+
     def paste_text(self) -> None:
         options = self.config['opts']
         img = ImageGrab.grabclipboard()
@@ -54,7 +59,7 @@ class Pastify(object):
                 file_name = file_name[1:]
 
             if path.exists(
-                    f"{self.path}{options['local_path']}{file_name}.png"):
+                    f"{self.path}{self.get_image_path_name()}{file_name}.png"):
                 self.logger("File already exists.", "WARN")
                 return
 
@@ -63,9 +68,9 @@ class Pastify(object):
         placeholder_text = ""
         if self.config['opts']['save'] == "local":
             if self.config['opts']['absolute_path']:
-                assets_path = f"{self.path}{options['local_path']}"
+                assets_path = f"{self.path}{self.get_image_path_name()}"
             else:
-                assets_path = f".{options['local_path']}"
+                assets_path = f".{self.get_image_path_name()}"
             placeholder_text = f"{assets_path}{file_name}.png"
             if not path.exists(assets_path):
                 makedirs(assets_path)

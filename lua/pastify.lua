@@ -25,8 +25,19 @@ M.config = {
   },
 }
 
+local imagePathRule
+
 M.getConfig = function()
+  imagePathRule = M.config.opts.local_path
+  M.config.opts.local_path = nil
   return M.config
+end
+
+M.createImagePathName = function()
+  if type(imagePathRule) == 'function' then
+    return imagePathRule()
+  end
+  return imagePathRule
 end
 
 local function create_command()
