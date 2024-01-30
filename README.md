@@ -8,6 +8,8 @@ Local Saving               |  Online Hosting
 :-------------------------:|:-------------------------:
 ![](./static/gifs/local.gif)  |  ![](./static/gifs/online.gif)
 
+To use this plugin, use `:Pastify` command, which will take the clipboard content and paste it
+
 ## Requirements
 
 - Neovim 0.8+
