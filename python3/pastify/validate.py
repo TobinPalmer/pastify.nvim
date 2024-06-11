@@ -9,7 +9,6 @@ def validate_config(config: Config, logger, filetype: str) -> bool:
         logger(
             "Not in a filetype configured in config.ft",
             "WARN")
-        return False
 
     if c is None:
         return False

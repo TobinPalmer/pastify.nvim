@@ -3,8 +3,10 @@ local M = {}
 ---@class plug_opts
 ---@field absolute_path boolean
 ---@field apikey string?
----@field local_path string
----@field save "local"|"online"
+---@field local_path string|function?
+---@field save "local_file"|"local"|"online"
+---@field filename string|function?
+---@field default_ft string
 
 ---@class config
 ---@field opts plug_opts
@@ -17,6 +19,8 @@ M.config = {
     apikey = '',
     local_path = '/assets/imgs/',
     save = 'local',
+    filename = '',
+    default_ft = 'markdown',
   },
   ft = {
     html = '<img src="$IMG$" alt="">',
@@ -26,11 +30,21 @@ M.config = {
 }
 
 local imagePathRule
+local fileNameRule
 
 M.getConfig = function()
   imagePathRule = M.config.opts.local_path
+  fileNameRule = M.config.opts.filename
   M.config.opts.local_path = nil
+  M.config.opts.filename = nil
   return M.config
+end
+
+M.getFileName = function()
+    if type(fileNameRule) == 'function' then
+        return fileNameRule()
+    end
+    return fileNameRule
 end
 
 M.createImagePathName = function()
@@ -50,7 +64,8 @@ local function create_command()
     python3 import pastify.main
     python3 image = pastify.main.Pastify()
 
-    command! Pastify python3 image.paste_text()
+    command! -range Pastify python3 image.paste_text(0)
+    command! -range PastifyAfter python3 image.paste_text(1)
   ]]
 end
 
