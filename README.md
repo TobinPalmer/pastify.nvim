@@ -30,7 +30,7 @@ Then, run `pip3 install pillow`.
 ```lua
 return {
   'TobinPalmer/pastify.nvim',
-  cmd = { 'Pastify' },
+  cmd = { 'Pastify', 'PastifyAfter' },
   config = function()
     require('pastify').setup {
       opts = {
@@ -56,6 +56,7 @@ require('pastify').setup {
     -- Example function for the file name that I like to use:
     -- filename = function() return vim.fn.expand("%:t:r") .. '_' .. os.date("%Y-%m-%d_%H-%M-%S") end,
     -- Example result: 'file_2021-08-01_12-00-00'
+    default_ft = 'markdown', -- Default filetype to use
   },
   ft = { -- Custom snippets for different filetypes, will replace $IMG$ with the image url
     html = '<img src="$IMG$" alt="">',
@@ -84,7 +85,7 @@ require('pastify').setup {
 
 #### Options
 
-**aboslute_path** - If true, the path will be absolute, if false, the path will be relative to the current file.
+**aboslute_path** - If true, the path will be absolute, if false, the path will be relative to either the current file or current working directory (depending on the **save** option).
 
 **apikey** - The api key for the online service, if you want to save online.
 
@@ -93,6 +94,8 @@ require('pastify').setup {
 **save** - Either 'local' or 'online' or 'local_file'. 'local' will save the image locally relative to the current working directory, 'online' will save the image online, 'local_file' will save the image locally relative to the file path.
 
 **filename** - The filename to save the image as, if empty pastify will ask for a name. This can be a lua function.
+
+**default_ft** - The default filetype to use if the filetype is not in the **ft** table.
 
 #### File Types
 
@@ -113,7 +116,7 @@ Or if you prefer to do everything in lazy.nvim, here is my config:
 ```lua
 return {
     'TobinPalmer/pastify.nvim',
-    cmd = { 'Pastify' },
+    cmd = { 'Pastify', 'PastifyAfter' },
     event = { 'BufReadPost' }, -- Load after the buffer is read, I like to be able to paste right away
     keys = {
         {noremap = true, mode = "x", '<leader>p', "<cmd>PastifyAfter<CR>"},
@@ -127,12 +130,7 @@ return {
                 apikey = '', -- Api key, required for online saving
                 local_path = '/assets/imgs/', -- The path to put local files in, ex ~/Projects/<name>/assets/images/<imgname>.png
                 save = 'local', -- Either 'local' or 'online' or 'local_file'
-                -- filename = function() return vim.fn.expand("%:t:r") .. '_' .. os.date('%Y-%m-%d_%H-%M-%S') end,
-                filename = function()
-                    local name = vim.fn.expand("%:t:r") .. '_' .. os.date('%Y-%m-%d_%H-%M-%S')
-                    return name
-                end,
-                -- filename = '',
+                filename = function() return vim.fn.expand("%:t:r") .. '_' .. os.date('%Y-%m-%d_%H-%M-%S') end,
                 default_ft = 'markdown', -- Default filetype to use
             },
             ft = { -- Custom snippets for different filetypes, will replace $IMG$ with the image url
