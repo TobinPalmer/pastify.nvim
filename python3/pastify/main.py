@@ -94,6 +94,12 @@ class Pastify(object):
             assets_path = path.abspath(
                 path.join(local_path, self.get_image_path_name())
             )
+
+            abs_img_path = path.join(assets_path, f"{file_name}.png")
+
+            if not path.exists(assets_path):
+                makedirs(assets_path)
+
             if not self.config["opts"]["absolute_path"]:
                 self.logger("Assets path is: " + str(repr(assets_path)), "INFO")
                 self.logger("Local path is: " + str(repr(local_path)), "INFO")
@@ -103,9 +109,7 @@ class Pastify(object):
                 assets_path = path.relpath(assets_path, current_file_path)
                 self.logger("Relative path is: " + str(repr(assets_path)), "INFO")
             placeholder_text = path.join(assets_path, f"{file_name}.png")
-            if not path.exists(assets_path):
-                makedirs(assets_path)
-            img.save(placeholder_text, "PNG")
+            img.save(abs_img_path, "PNG")
         else:
             base64_data = encode(img_bytes.getvalue(), "base64")
             base64_text = decode(base64_data, "ascii")
