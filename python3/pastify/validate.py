@@ -18,7 +18,7 @@ def validate_config(config: Config, logger, filetype: str) -> bool:
             "You need to get a free API key for online saving, get one at https://api.imgbb.com/", "WARN")
         return False
 
-    if opts["save"] != "local" and opts["save"] != 'online':
+    if opts["save"] != "local" and opts["save"] != 'online' and opts["save"] != 'local_file':
         logger(
             str(opts['save']), "WARN")
         return False
