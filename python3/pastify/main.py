@@ -146,4 +146,4 @@ class Pastify(object):
             "/", r"\/"
         )
 
-        vim.command(f"%s/{placeholder_text}/{result}/g")
+        vim.command(f"%s/{placeholder_text}/{result}/g", async_=True)
