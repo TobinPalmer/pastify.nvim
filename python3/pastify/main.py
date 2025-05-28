@@ -119,7 +119,11 @@ class Pastify(object):
 
         if filetype not in self.config["ft"]:
             filetype = self.config["opts"]["default_ft"]
-        pattern = self.config["ft"][filetype].replace("$IMG$", placeholder_text)
+        pattern = (
+            self.config["ft"][filetype]
+            .replace("$IMG$", placeholder_text)
+            .replace("$NAME$", file_name)
+        )
         # check if we're in visual mode to run a different command
         if vim.eval("mode()") in ["v", "V", ""]:
             vim.command(f"normal! c{pattern}")

@@ -23,13 +23,13 @@ M.config = {
     default_ft = 'markdown',
   },
   ft = {
-    html = '<img src="$IMG$" alt="">',
-    markdown = '![]($IMG$)',
+    html = '<img src="$IMG$" alt="$NAME$">',
+    markdown = '![$NAME$]($IMG$)',
     tex = [[\includegraphics[width=\linewidth]{$IMG$}]],
     css = 'background-image: url("$IMG$");',
     js = 'const img = new Image(); img.src = "$IMG$";',
     xml = '<image src="$IMG$" />',
-    php = '<?php echo "<img src=\"$IMG$\" alt=\"\">"; ?>',
+    php = '<?php echo "<img src="$IMG$" alt="$NAME$">"; ?>',
     python = '# $IMG$',
     java = '// $IMG$',
     c = '// $IMG$',
@@ -58,10 +58,10 @@ M.getConfig = function()
 end
 
 M.getFileName = function()
-    if type(fileNameRule) == 'function' then
-        return fileNameRule()
-    end
-    return fileNameRule
+  if type(fileNameRule) == 'function' then
+    return fileNameRule()
+  end
+  return fileNameRule
 end
 
 M.createImagePathName = function()
