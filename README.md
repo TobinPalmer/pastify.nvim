@@ -99,7 +99,9 @@ require('pastify').setup {
 
 #### File Types
 
-Each filetype can have a custom snippet that will replace `$IMG$` with the image url. This can be useful for markdown, html, or latex.
+Each filetype can have a custom snippet that will replace the variables below. This can be useful for markdown, html, or latex.
+* `$IMG$`: The image url
+* `$NAME$`: The image filename
 
 ### Custom Keybinding
 
@@ -134,13 +136,13 @@ return {
                 default_ft = 'markdown', -- Default filetype to use
             },
             ft = { -- Custom snippets for different filetypes, will replace $IMG$ with the image url
-                html = '<img src="$IMG$" alt="">',
-                markdown = '![]($IMG$)',
+                html = '<img src="$IMG$" alt="$NAME$">',
+                markdown = '![$NAME$]($IMG$)',
                 tex = [[\includegraphics[width=\linewidth]{$IMG$}]],
                 css = 'background-image: url("$IMG$");',
                 js = 'const img = new Image(); img.src = "$IMG$";',
                 xml = '<image src="$IMG$" />',
-                php = '<?php echo "<img src=\"$IMG$\" alt=\"\">"; ?>',
+                php = '<?php echo "<img src=\"$IMG$\" alt=\"$NAME$\">"; ?>',
                 python = '# $IMG$',
                 java = '// $IMG$',
                 c = '// $IMG$',
